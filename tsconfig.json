@@ -10,6 +10,9 @@
       ],
       "@models/*": [
         "models/*"
+      ],
+      "@lib/*": [
+        "lib/*"
       ]
     },
     "target": "es5",
