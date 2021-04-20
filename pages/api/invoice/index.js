@@ -1,31 +1,45 @@
 import connectDB from '@config/db';
 import Invoice from '@models/Invoice';
+import User from '@models/User';
+
 connectDB();
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    try {
-      const {
-        userId,
-        title,
-        invoiceFor: {
-          name,
-          address: { street, houseNumber, postCode },
-        },
-      } = req.body;
-      const invoice = await Invoice.create({
-        title,
-        invoiceFor: {
-          name,
-          address: { street, houseNumber, postCode },
-        },
-      });
-      res.status(200).json({ success: true, data: invoice });
-      console.log(req.body);
-    } catch (error) {
-      console.log(error);
+  const { method } = req;
+  try {
+    switch (method) {
+      case 'POST':
+        const {
+          user,
+          title,
+          invoiceFor: {
+            name,
+            address: { street, houseNumber, postCode },
+          },
+        } = req.body;
+        const invoice = await Invoice.create({
+          user,
+          title,
+          invoiceFor: {
+            name,
+            address: { street, houseNumber, postCode },
+          },
+        });
+        const us = await User.findById(user);
+
+        await us.invoices.push(invoice);
+        us.save();
+
+        res.status(200).json({ success: true, data: invoice });
+        break;
+
+      case 'GET':
+        const invoices = await Invoice.find({}).populate({ path: 'user', select: ' -password  -createdAt' });
+
+        res.status(200).json({ success: true, data: invoices });
+        break;
     }
-  } else {
-    // Handle any other HTTP method
+  } catch (error) {
+    console.log(error);
   }
 }

@@ -7,7 +7,7 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
   firstName: { type: String, required: [true, 'Please add first name'] },
   lastName: { type: String, required: [true, 'Please add last name'] },
-  invoices: [{ type: mongoose.Types.ObjectId, ref: 'Invoice' }],
+  invoices: [{ type: Schema.Types.ObjectId, ref: 'Invoice' }],
   createdAt: { type: Date, default: Date.now },
   company: { type: mongoose.Types.ObjectId, ref: 'Company' },
   password: { type: String, minlength: 6, select: false, required: [true, 'Please add password'] },
@@ -28,7 +28,7 @@ const UserSchema = new Schema({
   },
   isConsent: {
     type: Boolean,
-    required: [true, 'Please accept the therms and comditions'],
+    required: [true, 'Please accept the therms and conditions'],
   },
 });
 
@@ -70,4 +70,5 @@ UserSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-module.exports = User = mongoose.model('User', UserSchema);
+// module.exports = User = mongoose.model('User', UserSchema);
+module.exports = mongoose.models.User || mongoose.model('User', UserSchema);
