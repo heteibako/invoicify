@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 export const fetchInvoices = async () => {
-  const res = await fetch(`http://localhost:3000/api/invoice`);
-  return await res.json();
+  return await axios.get(`http://localhost:3000/api/invoice`).then((res) => res.data);
 };
 
 export const registerUser = async (data) => {
