@@ -8,9 +8,9 @@ const InvoiceSchema = new Schema({
   invoiceFor: {
     name: String,
     address: {
-      street: { type: String, required: [true, 'Please add company street'] },
-      houseNumber: { type: String, required: [true, 'Please add company houseNumber'] },
-      postCode: { type: String, required: [true, 'Please add company postCode'] },
+      street: { type: String },
+      houseNumber: { type: String },
+      postCode: { type: String },
     },
   },
   sum: { type: Number },
