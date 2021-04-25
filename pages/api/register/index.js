@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 }
 
 // Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
+export const sendTokenResponse = (user, statusCode, res) => {
   // Create token
   const token = user.getSignedJwtToken();
 

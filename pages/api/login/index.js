@@ -1,17 +1,18 @@
 import connectDB from '@config/db';
 import User from '@models/User';
+import ErrorResponse from '@lib/errorResponse';
 
 connectDB();
 
-export default async function handler(req, res) {
+export default async function handler(req, res, next) {
   if (req.method === 'POST') {
     try {
       const { email, password } = req.body;
+
       //Validate email and password
       if (!email || !password) {
         return next(new ErrorResponse('Adja meg az emailt es a jelszot'), 400);
       }
-
       const user = await User.findOne({ email }).select('+password');
       if (!user) {
         return next(new ErrorResponse('Ehhez az emailhez nem tartozik felhasznalo'), 401);
@@ -26,15 +27,11 @@ export default async function handler(req, res) {
     } catch (error) {
       console.log(error);
     }
-  } else if (req.method === 'GET') {
-    const user = await User.findById(req.body.id).select('role _id firstName lastName email phone avatar invoices');
-    res.status(200).json(user);
-  } else {
   }
 }
 
 // Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
+export const sendTokenResponse = (user, statusCode, res) => {
   // Create token
   const token = user.getSignedJwtToken();
 
@@ -51,12 +48,4 @@ const sendTokenResponse = (user, statusCode, res) => {
     success: true,
     token,
   });
-};
-
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '1mb',
-    },
-  },
 };
