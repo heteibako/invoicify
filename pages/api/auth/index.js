@@ -1,5 +1,6 @@
 import connectDB from '@config/db';
 import User from '@models/User';
+import ErrorResponse from '@lib/errorResponse';
 
 connectDB();
 
