@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useAddInvoice from 'hooks/invoices';
@@ -18,6 +19,7 @@ const schema = yup.object().shape({
 
 export default function AddInvoice() {
   const invoiceQuery = useAddInvoice();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -36,6 +38,7 @@ export default function AddInvoice() {
         address: { street, houseNumber, postCode },
       },
     });
+    router.push('/account/invoices');
   };
 
   return (
