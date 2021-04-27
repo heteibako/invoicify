@@ -3,6 +3,7 @@ import { IInvoice } from '@lib/interfaces';
 import { fetchInvoices } from '@lib/api';
 import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
+
 const Invoices = ({ dehydratedState }) => {
   const data = dehydratedState.queries[0].state.data.data;
 

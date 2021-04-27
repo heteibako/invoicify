@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 
 const Account = () => {
   const [session] = useSession();
-
   return (
     <>
       {!session ? (

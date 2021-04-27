@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -7,7 +8,9 @@ import useAddInvoice from 'hooks/invoices';
 
 interface IFormInputs {
   title: string;
+  user: string;
   name: string;
+  email: string;
   street: string;
   houseNumber: string;
   postCode: string;
@@ -20,6 +23,9 @@ const schema = yup.object().shape({
 export default function AddInvoice() {
   const invoiceQuery = useAddInvoice();
   const router = useRouter();
+  const [session] = useSession();
+  const email = session?.user.email;
+
   const {
     register,
     handleSubmit,
@@ -32,7 +38,7 @@ export default function AddInvoice() {
     const { name, street, houseNumber, postCode, title } = data;
     invoiceQuery.mutate({
       title,
-      user: '6087b6a4754c31028cdeadd7',
+      email,
       invoiceFor: {
         name,
         address: { street, houseNumber, postCode },

@@ -5,7 +5,7 @@ export default function useAddInvoice() {
   const queryClient = useQueryClient();
   interface IInvoiceData {
     title: string;
-    user: string;
+    email: string;
     invoiceFor: {
       name: string;
       address: { street: string; houseNumber: string; postCode: string };

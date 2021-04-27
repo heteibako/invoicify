@@ -12,6 +12,7 @@ export interface IInvoice {
 
 export interface InvoiceFor {
   name: string;
+  email: string;
   address: {
     street: string;
     houseNumber: string;

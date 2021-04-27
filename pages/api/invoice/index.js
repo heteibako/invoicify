@@ -10,15 +10,16 @@ export default async function handler(req, res) {
     switch (method) {
       case 'POST':
         const {
-          user,
           title,
+          email,
           invoiceFor: {
             name,
             address: { street, houseNumber, postCode },
           },
         } = req.body;
+        const userId = await User.findOne({ email });
         const invoice = await Invoice.create({
-          user,
+          user: userId._id,
           title,
           invoiceFor: {
             name,
