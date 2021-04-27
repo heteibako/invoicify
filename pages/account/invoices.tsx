@@ -7,15 +7,34 @@ const Invoices = ({ dehydratedState }) => {
   const data = dehydratedState.queries[0].state.data.data;
 
   return (
-    <div>
-      <h1>Invoices</h1>
-      {data.map(({ title, _id, user }: IInvoice) => (
-        <div key={_id}>
-          <p>{title}</p>
-          <p>{user?.firstName}</p>
-          <p>{user?.lastName}</p>
+    <div className='container'>
+      <div className='row'>
+        <div className='col'>
+          <h1 className='display-4'>Invoices</h1>
         </div>
-      ))}
+      </div>
+      <div className='row mt-5'>
+        <div className='col'>
+          <table className='table'>
+            <thead>
+              <tr>
+                <th scope='col'>#</th>
+                <th scope='col'>Invoice title</th>
+                <th scope='col'>User</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map(({ title, _id, user }: IInvoice, index: number) => (
+                <tr key={_id}>
+                  <td>{index + 1}</td>
+                  <td>{title}</td>
+                  <td>{user?.name}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

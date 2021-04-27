@@ -25,10 +25,6 @@ export default async function handler(req, res) {
             address: { street, houseNumber, postCode },
           },
         });
-        const us = await User.findById(user);
-
-        await us.invoices.push(invoice);
-        us.save();
 
         res.status(200).json({ success: true, data: invoice });
         break;

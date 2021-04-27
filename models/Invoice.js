@@ -18,6 +18,4 @@ const InvoiceSchema = new Schema({
   paid: { type: Boolean },
 });
 
-// module.exports = Invoice = mongoose.model('Invoice', InvoiceSchema);
-
 module.exports = mongoose.models.Invoice || mongoose.model('Invoice', InvoiceSchema);

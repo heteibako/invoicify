@@ -1,6 +1,5 @@
 export interface IInvoice {
-  firstName: string;
-  lastName: string;
+  name: string;
   title: string;
   createdAt: string;
   invoiceFor: InvoiceFor;
@@ -8,7 +7,7 @@ export interface IInvoice {
   taxes: number;
   paid: boolean;
   _id: string;
-  user: { firstName: string; lastName: string };
+  user: { name: string };
 }
 
 export interface InvoiceFor {

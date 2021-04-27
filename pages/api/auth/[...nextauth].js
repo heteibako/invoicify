@@ -5,7 +5,6 @@ import connectDB from '@config/db';
 
 connectDB();
 export default NextAuth({
-  // Configure one or more authentication providers
   providers: [
     Providers.Credentials({
       name: 'Credentials',
@@ -16,7 +15,7 @@ export default NextAuth({
 
       async authorize(credentials) {
         try {
-          const { email, password, csrfToken } = credentials;
+          const { email, password } = credentials;
           if (!email || !password) {
             throw new Error('Whoops!');
           }
@@ -29,9 +28,9 @@ export default NextAuth({
             // return next(new ErrorResponse('A jelszó nem helyes!'), 401);
             throw new Error('A jelszó nem helyes!');
           }
-          return { name: `${user.firstName} ${user.lastName}`, email: user.email, isAuthenticated: true };
+          return user;
         } catch (error) {
-          console.log('Error');
+          console.log('Error coming');
         }
       },
     }),
@@ -50,12 +49,15 @@ export default NextAuth({
     newUser: null, // If set, new users will be directed here on first sign in
   },
   callbacks: {
-    jwt: async (token, user, account, profile, isNewUser) => {
+    async jwt(token, user, account, profile, isNewUser) {
       const isSignIn = user ? true : false;
       if (isSignIn) {
         token.auth_time = Math.floor(Date.now() / 1000);
       }
       return Promise.resolve(token);
+    },
+    async session(session, user) {
+      return session;
     },
   },
 

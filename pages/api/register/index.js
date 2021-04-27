@@ -6,10 +6,9 @@ connectDB();
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      const { firstName, lastName, password, email, isConsent, phone, company } = req.body;
+      const { name, password, email, isConsent, phone, company } = req.body;
       const user = await User.create({
-        firstName,
-        lastName,
+        name,
         password,
         email,
         isConsent,

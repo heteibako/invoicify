@@ -5,9 +5,7 @@ const jwt = require('jsonwebtoken');
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-  firstName: { type: String, required: [true, 'Please add first name'] },
-  lastName: { type: String, required: [true, 'Please add last name'] },
-  invoices: [{ type: Schema.Types.ObjectId, ref: 'Invoice' }],
+  name: { type: String, required: [true, 'Please add  name'] },
   createdAt: { type: Date, default: Date.now },
   company: { type: mongoose.Types.ObjectId, ref: 'Company' },
   password: { type: String, minlength: 6, select: false, required: [true, 'Please add password'] },

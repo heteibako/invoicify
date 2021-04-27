@@ -11,16 +11,16 @@ export default async function handler(req, res, next) {
 
       //Validate email and password
       if (!email || !password) {
-        return next(new ErrorResponse('Adja meg az emailt es a jelszot'), 400);
+        // return next(new ErrorResponse('Adja meg az emailt es a jelszot'), 400);
       }
       const user = await User.findOne({ email }).select('+password');
       if (!user) {
-        return next(new ErrorResponse('Ehhez az emailhez nem tartozik felhasznalo'), 401);
+        // return next(new ErrorResponse('Ehhez az emailhez nem tartozik felhasznalo'), 401);
       }
       //Check if password matches
       const isMatch = await user.matchPassword(password);
       if (!isMatch) {
-        return next(new ErrorResponse('A jelszó nem helyes!'), 401);
+        // return next(new ErrorResponse('A jelszó nem helyes!'), 401);
       }
       //Create token
       sendTokenResponse(user, 200, res);

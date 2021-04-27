@@ -30,7 +30,7 @@ export default function AddInvoice() {
     const { name, street, houseNumber, postCode, title } = data;
     invoiceQuery.mutate({
       title,
-      user: '607eb0b6006e2621408d0209',
+      user: '6087b6a4754c31028cdeadd7',
       invoiceFor: {
         name,
         address: { street, houseNumber, postCode },
@@ -39,23 +39,31 @@ export default function AddInvoice() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register('title')} />
-        <p>{errors.title?.message}</p>
-        <input {...register('name')} />
-        <p>{errors.name?.message}</p>
+    <div className='container'>
+      <div className='row mt-5'>
+        <div className='col'>
+          <h1 className='display-4 text-center'>Add Invoice</h1>
+        </div>
+      </div>
+      <div className='row mt-5'>
+        <div className='col-md-4 mx-auto'>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <label className='form-label'></label>
+            <input {...register('title')} className='form-control' />
+            <p>{errors.title?.message}</p>
 
-        <input {...register('street')} />
-        <p>{errors.street?.message}</p>
+            <input {...register('street')} className='form-control' />
+            <p>{errors.street}</p>
 
-        <input {...register('houseNumber')} />
-        <p>{errors.houseNumber?.message}</p>
-        <input {...register('postCode')} />
-        <p>{errors.postCode?.message}</p>
+            <input {...register('houseNumber')} className='form-control' />
+            <p>{errors.houseNumber?.message}</p>
+            <input {...register('postCode')} className='form-control' />
+            <p>{errors.postCode?.message}</p>
 
-        <input type='submit' />
-      </form>
+            <input type='submit' className='btn btn-primary' />
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
