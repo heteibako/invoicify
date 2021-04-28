@@ -12,9 +12,12 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
       <li className='nav-item' onClick={logout}>
         <a className='nav-link'>Logout</a>
       </li>
+      <Link href='/account/addinvoice'>
+        <a className='nav-link'>New Invoice</a>
+      </Link>
     </>
   );
-  const normalLinks = (
+  const guestLinks = (
     <li className='nav-item' onClick={login}>
       <a className='nav-link'>Login</a>
     </li>
@@ -45,7 +48,7 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
               </Link>
             </li>
             {console.log(session)}
-            {session ? authLinks : normalLinks}
+            {session ? authLinks : guestLinks}
           </ul>
         </div>
         {session ? <small className='text-muted'>{signedInAs}</small> : null}

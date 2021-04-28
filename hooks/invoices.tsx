@@ -6,10 +6,25 @@ export default function useAddInvoice() {
   interface IInvoiceData {
     title: string;
     email: string;
-    invoiceFor: {
-      name: string;
-      address: { street: string; houseNumber: string; postCode: string };
-    };
+    name: string;
+    street: string;
+    houseNumber: string;
+    postCode: string;
+    user?: string;
+    invoiceNumber: string;
+    logo: string;
+    dueDate: string;
+    paymentTerm: string;
+    billTo: string;
+    shipTo: string;
+    notes: string;
+    terms: string;
+    items: [];
+    sum: number;
+    tax: number;
+    amountPaid: number;
+    subTotal: number;
+    balance: number;
   }
   return useMutation((data: IInvoiceData) => axios.post(`http://localhost:3000/api/invoice`, data), {
     onError: (error, variables, context) => {

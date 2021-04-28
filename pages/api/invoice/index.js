@@ -11,20 +11,47 @@ export default async function handler(req, res) {
       case 'POST':
         const {
           title,
-          email,
+          invoiceNumber,
+          logo,
+          dueDate,
+          paymentTerm,
+          billTo,
+          shipTo,
+          notes,
+          terms,
           invoiceFor: {
             name,
             address: { street, houseNumber, postCode },
           },
+          items,
+          sum,
+          tax,
+          amountPaid,
+          subTotal,
+          balance,
         } = req.body;
         const userId = await User.findOne({ email });
         const invoice = await Invoice.create({
           user: userId._id,
           title,
+          invoiceNumber,
+          logo,
+          dueDate,
+          paymentTerm,
+          billTo,
+          shipTo,
+          notes,
+          terms,
           invoiceFor: {
             name,
             address: { street, houseNumber, postCode },
           },
+          items,
+          sum,
+          tax,
+          amountPaid,
+          subTotal,
+          balance,
         });
 
         res.status(200).json({ success: true, data: invoice });
