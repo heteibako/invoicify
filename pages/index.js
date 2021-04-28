@@ -4,16 +4,8 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 import NavBar from '@components/Navbar';
 
 export default function Home() {
-  const [session, loading] = useSession();
   return (
     <>
-      <NavBar
-        session={session}
-        login={() => signIn()}
-        logout={() => signOut()}
-        signedInAs={`Signed in as ${session?.user?.email}`}
-      />
-
       {/* <div className={styles.container}>
         {session && (
           <>
