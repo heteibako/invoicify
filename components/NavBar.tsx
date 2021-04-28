@@ -44,6 +44,7 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
                 </a>
               </Link>
             </li>
+            {console.log(session)}
             {session ? authLinks : normalLinks}
           </ul>
         </div>

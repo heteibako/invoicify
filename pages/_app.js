@@ -14,10 +14,11 @@ function MyApp({ Component, pageProps }) {
   if (!queryClientRef.current) {
     queryClientRef.current = new QueryClient();
   }
+
+  if (loading) return <h1>Loading....</h1>;
   return (
     <QueryClientProvider client={queryClientRef.current}>
       <Hydrate state={pageProps.dehydratedState}>
-        {console.log(session)}
         <NavBar
           session={session}
           login={() => signIn()}

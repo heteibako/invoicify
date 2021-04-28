@@ -1,8 +1,7 @@
-import { useSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
-const Account = () => {
-  const [session] = useSession();
+const Account = ({ session }) => {
   return (
     <>
       {!session ? (
@@ -18,6 +17,22 @@ const Account = () => {
       )}
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/api/auth/signin',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: { session },
+  };
 };
 
 export default Account;
