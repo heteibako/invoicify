@@ -28,6 +28,7 @@ export default NextAuth({
             // return next(new ErrorResponse('A jelszó nem helyes!'), 401);
             throw new Error('A jelszó nem helyes!');
           }
+
           return user;
         } catch (error) {
           console.log('Error coming');
@@ -50,14 +51,12 @@ export default NextAuth({
   },
   callbacks: {
     async jwt(token, user, account, profile, isNewUser) {
-      const isSignIn = user ? true : false;
-      if (isSignIn) {
-        token.auth_time = Math.floor(Date.now() / 1000);
-      }
-      return Promise.resolve(token);
+      user && (token.user = user);
+      return Promise.resolve(token); // ...here
     },
     async session(session, user) {
-      return session;
+      session.user = user.user;
+      return Promise.resolve(session);
     },
   },
 

@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 
 const Account = ({ session }) => {
+  const { user } = session;
   return (
     <>
       {!session ? (
@@ -10,7 +11,8 @@ const Account = ({ session }) => {
         <div className='container'>
           <div className='row'>
             <div className='col'>
-              <h1 className='display-4'>My Account</h1>
+              <h1 className='display-4'>My Account {user?.name}</h1>
+              <h1 className='display-4'>Phone {user?.phone}</h1>
             </div>
           </div>
         </div>
