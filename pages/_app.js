@@ -1,6 +1,10 @@
 import React from 'react';
 import '../styles/globals.css';
-import 'bootstrap/dist/css/bootstrap.css';
+// styles
+import 'bootstrap/scss/bootstrap.scss';
+import '../assets/scss/paper-kit.scss';
+import '../assets/demo/demo.css';
+import '../assets/demo/react-demo.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Hydrate } from 'react-query/hydration';

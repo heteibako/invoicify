@@ -1,65 +1,94 @@
 import React from 'react';
 import Link from 'next/link';
+import Headroom from 'headroom.js';
+import { Collapse, NavbarBrand, Navbar, NavItem, Nav, Container, UncontrolledTooltip } from 'reactstrap';
 
 const NavBar = ({ session, login, logout, signedInAs }) => {
+  const [bodyClick, setBodyClick] = React.useState(false);
+  const [collapseOpen, setCollapseOpen] = React.useState(true);
+  React.useEffect(() => {
+    let headroom = new Headroom(document.getElementById('navbar-main'));
+    // initialise
+    headroom.init();
+  });
   const authLinks = (
     <>
-      <li className='nav-item'>
+      {bodyClick ? (
+        <div
+          id='bodyClick'
+          onClick={() => {
+            document.documentElement.classList.toggle('nav-open');
+            setBodyClick(false);
+            setCollapseOpen(false);
+          }}
+        />
+      ) : null}
+      <NavItem>
         <Link href='/account'>
           <a className='nav-link'>Account</a>
         </Link>
-      </li>
-      <li className='nav-item' onClick={logout}>
-        <a className='nav-link'>Logout</a>
-      </li>
-      <li>
+      </NavItem>
+
+      <NavItem>
         <Link href='/account/invoices'>
           <a className='nav-link'>My Invoices</a>
         </Link>
-      </li>
-      <li>
+      </NavItem>
+      <NavItem>
         <Link href='/account/addinvoice'>
           <a className='nav-link'>New Invoice</a>
         </Link>
-      </li>
+      </NavItem>
+      <NavItem onClick={logout} style={{ cursor: 'pointer' }}>
+        <a className='nav-link'>Logout</a>
+      </NavItem>
     </>
   );
   const guestLinks = (
-    <li className='nav-item' onClick={login}>
+    <NavItem onClick={login}>
       <a className='nav-link'>Login</a>
-    </li>
+    </NavItem>
   );
+
   return (
-    <nav className='navbar navbar-expand-lg navbar-light bg-light'>
-      <div className='container-fluid'>
-        <a className='navbar-brand' href='#'>
-          Navbar
-        </a>
-        <button
-          className='navbar-toggler'
-          type='button'
-          data-bs-toggle='collapse'
-          data-bs-target='#navbarSupportedContent'
-          aria-controls='navbarSupportedContent'
-          aria-expanded='false'
-          aria-label='Toggle navigation'>
-          <span className='navbar-toggler-icon'></span>
-        </button>
-        <div className='collapse navbar-collapse' id='navbarSupportedContent'>
-          <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
-            <li className='nav-item'>
-              <Link href='/'>
-                <a className='nav-link active' aria-current='page'>
-                  Home
-                </a>
-              </Link>
-            </li>
-            {session ? authLinks : guestLinks}
-          </ul>
-        </div>
-        {session ? <small className='text-muted'>{signedInAs}</small> : null}
-      </div>
-    </nav>
+    <>
+      <Navbar expand='lg' id='navbar-main'>
+        <Container>
+          <div className='navbar-translate'>
+            <NavbarBrand id='navbar-brand'>Invoicify</NavbarBrand>
+            <UncontrolledTooltip placement='bottom' target='navbar-brand'>
+              Invoicify
+            </UncontrolledTooltip>
+            <button
+              className='navbar-toggler'
+              id='navigation'
+              type='button'
+              onClick={() => {
+                document.documentElement.classList.toggle('nav-open');
+                setBodyClick(true);
+                setCollapseOpen(true);
+              }}>
+              <span className='navbar-toggler-bar bar1' />
+              <span className='navbar-toggler-bar bar2' />
+              <span className='navbar-toggler-bar bar3' />
+            </button>
+          </div>
+          <Collapse isOpen={collapseOpen}>
+            <Nav className='ml-auto'>
+              <NavItem>
+                <Link href='/'>
+                  <a className='nav-link active' aria-current='page'>
+                    Home
+                  </a>
+                </Link>
+              </NavItem>
+              {session ? authLinks : guestLinks}
+            </Nav>
+          </Collapse>
+          {session ? <small className='text-muted'>{signedInAs}</small> : null}
+        </Container>
+      </Navbar>
+    </>
   );
 };
 
