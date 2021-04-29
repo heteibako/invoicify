@@ -45,6 +45,12 @@ export default function AddInvoice() {
   const [item, setItem] = useState({ description: '', rate: 0, quantity: 0 });
   const [items, setItems] = useState([]);
 
+  const handleItemDelete = (e: { target: { value: number } }) => {
+    const array = [...items]; // make a separate copy of the array
+    const index = array.indexOf(Number(e.target.value));
+    array.splice(index, 1);
+    setItems(array);
+  };
   const {
     register,
     handleSubmit,
@@ -145,31 +151,40 @@ export default function AddInvoice() {
           </div>
         </div>
         {/* PREVIEW */}
-        <div className='row'>
-          <div className='col-10'>
+        <div className='row my-3'>
+          <div className='col-3'>
             <input
+              className='form-control form-control-sm'
               value={item.description}
               name='description'
               onChange={(e) => setItem({ ...item, [e.target.name]: e.target.value })}
               placeholder='description'
             />
+          </div>
+          <div className='col-3'>
             <input
+              className='form-control form-control-sm'
               name='rate'
               value={item.rate}
               onChange={(e) => setItem({ ...item, [e.target.name]: e.target.value })}
               placeholder='rate'
             />
+          </div>
+          <div className='col-3'>
             <input
+              className='form-control form-control-sm'
               name='quantity'
               value={item.quantity}
               onChange={(e) => setItem({ ...item, [e.target.name]: e.target.value })}
               placeholder='quantity'
             />
           </div>
-          <div className='col-2'>
+
+          <div className='col-3'>
             <button
               className='btn btn-primary btn-sm'
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 setItems([...items, item]);
               }}>
               Add item
@@ -178,7 +193,17 @@ export default function AddInvoice() {
         </div>
         <InvoiceTable>
           {items.map((inv, i) => (
-            <InvoiceItem description={inv.description} index={i + 1} quantity={inv.quantity} rate={inv.rate} />
+            <InvoiceItem
+              key={i}
+              description={inv.description}
+              index={i}
+              quantity={inv.quantity}
+              rate={inv.rate}
+              handleDelete={(e) => {
+                e.preventDefault();
+                handleItemDelete(e);
+              }}
+            />
           ))}
         </InvoiceTable>
         <div className='row'>

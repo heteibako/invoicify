@@ -5,8 +5,9 @@ interface IItemProps {
   quantity: number;
   rate: number;
   amount?: number;
+  handleDelete: (desc) => void;
 }
-export const InvoiceItem = ({ index, description, quantity, rate }: IItemProps) => {
+export const InvoiceItem = ({ index, description, quantity, rate, handleDelete }: IItemProps) => {
   const calculateAmount = () => {
     return quantity * rate;
   };
@@ -17,6 +18,11 @@ export const InvoiceItem = ({ index, description, quantity, rate }: IItemProps) 
       <td>{quantity}</td>
       <td>{rate}</td>
       <td>{calculateAmount()}</td>
+      <td>
+        <button value={index} className='btn btn-danger btn-sm' onClick={handleDelete}>
+          Delete
+        </button>
+      </td>
     </tr>
   );
 };

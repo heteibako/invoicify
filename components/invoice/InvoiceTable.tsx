@@ -10,6 +10,7 @@ export const InvoiceTable = ({ children }) => {
               <th scope='col'>Quantity</th>
               <th scope='col'>Rate</th>
               <th scope='col'>Amount</th>
+              <th scope='col'>Delete</th>
             </tr>
           </thead>
           <tbody>{children}</tbody>
