@@ -13,16 +13,6 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
   });
   const authLinks = (
     <>
-      {bodyClick ? (
-        <div
-          id='bodyClick'
-          onClick={() => {
-            document.documentElement.classList.toggle('nav-open');
-            setBodyClick(false);
-            setCollapseOpen(false);
-          }}
-        />
-      ) : null}
       <NavItem>
         <Link href='/account'>
           <a className='nav-link'>Account</a>
@@ -52,7 +42,17 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
 
   return (
     <>
-      <Navbar expand='lg' id='navbar-main'>
+      {bodyClick ? (
+        <div
+          id='bodyClick'
+          onClick={() => {
+            document.documentElement.classList.toggle('nav-open');
+            setBodyClick(false);
+            setCollapseOpen(false);
+          }}
+        />
+      ) : null}
+      <Navbar expand='lg' id='navbar-main' color='danger'>
         <Container>
           <div className='navbar-translate'>
             <NavbarBrand id='navbar-brand'>Invoicify</NavbarBrand>
@@ -74,7 +74,7 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
             </button>
           </div>
           <Collapse isOpen={collapseOpen}>
-            <Nav className='ml-auto'>
+            <Nav className='ml-auto' navbar>
               <NavItem>
                 <Link href='/'>
                   <a className='nav-link active' aria-current='page'>
