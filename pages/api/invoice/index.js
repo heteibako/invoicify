@@ -13,16 +13,17 @@ export default async function handler(req, res) {
           title,
           invoiceNumber,
           logo,
+          email,
           dueDate,
           paymentTerm,
           billTo,
           shipTo,
           notes,
           terms,
-          invoiceFor: {
-            name,
-            address: { street, houseNumber, postCode },
-          },
+          name,
+          street,
+          houseNumber,
+          postCode,
           items,
           sum,
           tax,
@@ -64,6 +65,7 @@ export default async function handler(req, res) {
         break;
     }
   } catch (error) {
+    console.log('error called');
     console.log(error);
   }
 }

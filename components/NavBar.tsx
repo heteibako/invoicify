@@ -12,9 +12,16 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
       <li className='nav-item' onClick={logout}>
         <a className='nav-link'>Logout</a>
       </li>
-      <Link href='/account/addinvoice'>
-        <a className='nav-link'>New Invoice</a>
-      </Link>
+      <li>
+        <Link href='/account/invoices'>
+          <a className='nav-link'>My Invoices</a>
+        </Link>
+      </li>
+      <li>
+        <Link href='/account/addinvoice'>
+          <a className='nav-link'>New Invoice</a>
+        </Link>
+      </li>
     </>
   );
   const guestLinks = (
@@ -47,7 +54,6 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
                 </a>
               </Link>
             </li>
-            {console.log(session)}
             {session ? authLinks : guestLinks}
           </ul>
         </div>

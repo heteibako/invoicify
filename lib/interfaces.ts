@@ -4,8 +4,10 @@ export interface IInvoice {
   createdAt: string;
   invoiceFor: InvoiceFor;
   sum: number;
-  taxes: number;
+  tax: number;
   paid: boolean;
+  subTotal: number;
+  dueDate: string;
   _id: string;
   user: { name: string };
 }

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSession } from 'next-auth/client';
+import { getSession, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useAddInvoice from 'hooks/invoices';
 import { InvoiceItem } from '@components/invoice/InvoiceItem';
 import { InvoiceTable } from '@components/invoice/InvoiceTable';
+import { GetServerSideProps } from 'next';
 
 interface IFormInputs {
   title: string;
@@ -36,13 +37,11 @@ const schema = yup.object().shape({
   name: yup.string().required(),
 });
 
-export default function AddInvoice() {
+export default function AddInvoice({ session }) {
   const invoiceQuery = useAddInvoice();
   const router = useRouter();
-  const [session] = useSession();
-  const email = session?.user.email;
   const [item, setItem] = useState({ description: '', rate: 0, quantity: 0 });
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<any>([]);
 
   const [tax, setTax] = useState(0);
 
@@ -62,8 +61,8 @@ export default function AddInvoice() {
   } = useForm<IFormInputs>({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data: IFormInputs, e: { preventDefault: () => void }) => {
-    e.preventDefault();
+  console.log(session.user.email);
+  const onSubmit = (data: IFormInputs) => {
     const {
       title,
       invoiceNumber,
@@ -78,17 +77,13 @@ export default function AddInvoice() {
       notes,
       terms,
       name,
-      items,
-      sum,
-      tax,
       amountPaid,
-      subTotal,
       balance,
     } = data;
     invoiceQuery.mutate({
-      email,
       title,
       name,
+      email: session.user.email,
       street,
       houseNumber,
       postCode,
@@ -100,13 +95,14 @@ export default function AddInvoice() {
       shipTo,
       notes,
       terms,
-      items,
-      sum,
+      items: items,
+      sum: totalAmount,
       tax,
       amountPaid,
-      subTotal,
+      subTotal: totalAmountWithTax,
       balance,
     });
+
     router.push('/account/invoices');
   };
 
@@ -232,3 +228,19 @@ export default function AddInvoice() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/api/auth/signin',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: { session },
+  };
+};

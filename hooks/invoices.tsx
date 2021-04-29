@@ -6,7 +6,7 @@ export default function useAddInvoice() {
   interface IInvoiceData {
     title: string;
     email: string;
-    name: string;
+    name?: string;
     street: string;
     houseNumber: string;
     postCode: string;
@@ -28,10 +28,10 @@ export default function useAddInvoice() {
   }
   return useMutation((data: IInvoiceData) => axios.post(`http://localhost:3000/api/invoice`, data), {
     onError: (error, variables, context) => {
-      console.log(error, variables, context);
+      // console.log(error, variables, context);
     },
     onSuccess: (error, variables, context) => {
-      console.log(error, variables, context);
+      // console.log(error, variables, context);
       queryClient.invalidateQueries('invoices');
     },
     onSettled: () => {
