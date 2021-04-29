@@ -5,6 +5,7 @@ import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 import { format } from 'date-fns';
 import { getSession } from 'next-auth/client';
+import Link from 'next/link';
 
 const Invoices = ({ dehydratedState }) => {
   const { data } = dehydratedState.queries[0].state.data;
@@ -59,7 +60,9 @@ const Invoices = ({ dehydratedState }) => {
                     <td>{tax} %</td>
                     <td>{format(new Date(dueDate), 'MM/dd/yyyy')}</td>
                     <td>
-                      <button className='btn btn-primary btn-sm'>Print</button>
+                      <Link href={`/account/invoices/${_id}`}>
+                        <a className='btn btn-primary btn-sm'>Print</a>
+                      </Link>
                     </td>
                   </tr>
                 )
