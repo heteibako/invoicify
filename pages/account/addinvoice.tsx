@@ -41,9 +41,10 @@ export default function AddInvoice() {
   const router = useRouter();
   const [session] = useSession();
   const email = session?.user.email;
-
   const [item, setItem] = useState({ description: '', rate: 0, quantity: 0 });
   const [items, setItems] = useState([]);
+
+  const [tax, setTax] = useState(0);
 
   const handleItemDelete = (e: { target: { value: number } }) => {
     const array = [...items]; // make a separate copy of the array
@@ -51,6 +52,9 @@ export default function AddInvoice() {
     array.splice(index, 1);
     setItems(array);
   };
+  const totalAmount =
+    items.length === 0 ? null : items.reduce((acc, curr) => acc + Number(curr.rate) * Number(curr.quantity), 0);
+  const totalAmountWithTax = totalAmount + (totalAmount / 100) * tax;
   const {
     register,
     handleSubmit,
@@ -165,6 +169,7 @@ export default function AddInvoice() {
             <input
               className='form-control form-control-sm'
               name='rate'
+              type='number'
               value={item.rate}
               onChange={(e) => setItem({ ...item, [e.target.name]: e.target.value })}
               placeholder='rate'
@@ -174,6 +179,7 @@ export default function AddInvoice() {
             <input
               className='form-control form-control-sm'
               name='quantity'
+              type='number'
               value={item.quantity}
               onChange={(e) => setItem({ ...item, [e.target.name]: e.target.value })}
               placeholder='quantity'
@@ -209,6 +215,17 @@ export default function AddInvoice() {
         <div className='row'>
           <div className='col'>
             <input type='submit' className='btn btn-primary' />
+          </div>
+        </div>
+        <hr />
+        <div className='row'>
+          <div className='col-2'>
+            <input placeholder='tax' className='form-control' onChange={(e) => setTax(Number(e.target.value))} />
+          </div>
+          <div className='col-8'></div>
+          <div className='col-2'>
+            <p>total: {totalAmount}</p>
+            <p>total with tax: {totalAmountWithTax}</p>
           </div>
         </div>
       </form>
