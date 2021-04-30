@@ -24,7 +24,6 @@ export default function useAddInvoice() {
     tax: number;
     amountPaid: number;
     subTotal: number;
-    balance: number;
   }
   return useMutation((data: IInvoiceData) => axios.post(`http://localhost:3000/api/invoice`, data), {
     onError: (error, variables, context) => {

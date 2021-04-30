@@ -24,6 +24,7 @@ export interface InvoiceFor {
 
 export interface IFormInputs {
   title: string;
+  description: string;
   user: string;
   name: string;
   street: string;
@@ -43,5 +44,4 @@ export interface IFormInputs {
   tax: number;
   amountPaid: number;
   subTotal: number;
-  balance: number;
 }

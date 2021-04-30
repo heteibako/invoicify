@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { getSession, useSession } from 'next-auth/client';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useAddInvoice from 'hooks/invoices';
-import { InvoiceItem } from '@components/invoice/InvoiceItem';
 import { InvoiceTable } from '@components/invoice/InvoiceTable';
 import { GetServerSideProps } from 'next';
 import { IFormInputs } from '@lib/interfaces';
@@ -17,32 +16,37 @@ const schema = yup.object().shape({
 export default function AddInvoice({ session }) {
   const invoiceQuery = useAddInvoice();
   const router = useRouter();
-  const [item, setItem] = useState({ description: '', rate: 0, quantity: 0 });
-  const [items, setItems] = useState<any>([]);
-
   const [tax, setTax] = useState(0);
 
-  const handleItemDelete = (e: { target: { value: number } }) => {
-    const array = [...items];
-    const index = array.indexOf(Number(e.target.value));
-    array.splice(index, 1);
-    setItems(array);
-  };
-  const totalAmount =
-    items.length === 0
-      ? null
-      : items.reduce(
-          (acc: number, curr: { rate: number; quantity: number }) => acc + Number(curr.rate) * Number(curr.quantity),
-          0
-        );
-  const totalAmountWithTax = totalAmount + (totalAmount / 100) * tax;
   const {
     register,
     handleSubmit,
+    control,
+    watch,
     formState: { errors },
   } = useForm<IFormInputs>({
     resolver: yupResolver(schema),
   });
+
+  const calculateAmount = (q: number, r: number): number => {
+    return q * r;
+  };
+
+  const { append, remove, fields } = useFieldArray({
+    control,
+    name: 'items',
+  });
+
+  const watchFieldArray = watch('items');
+  const controlledFields = fields.map((field, index) => {
+    return {
+      ...field,
+      ...watchFieldArray[index],
+    };
+  });
+  const filedsArray = fields.map((field) => ({ rate: field.rate, quantity: field.quantity }));
+  const totalAmount = filedsArray && filedsArray.reduce((acc, curr) => acc + curr.rate * curr.quantity, 0);
+  const totalAmountWithTax = totalAmount + (totalAmount / 100) * tax;
 
   const onSubmit = (data: IFormInputs) => {
     const {
@@ -60,7 +64,7 @@ export default function AddInvoice({ session }) {
       terms,
       name,
       amountPaid,
-      balance,
+      items,
     } = data;
     invoiceQuery.mutate({
       title,
@@ -77,14 +81,13 @@ export default function AddInvoice({ session }) {
       shipTo,
       notes,
       terms,
-      items: items,
+      items,
       sum: totalAmount,
       tax,
       amountPaid,
       subTotal: totalAmountWithTax,
-      balance,
     });
-
+    console.log(data);
     router.push('/account/invoices');
   };
 
@@ -132,67 +135,59 @@ export default function AddInvoice({ session }) {
             </div>
           </div>
         </div>
-        {/* PREVIEW */}
-        <div className='row my-3'>
-          <div className='col-3'>
-            <input
-              className='form-control form-control-sm'
-              value={item.description}
-              name='description'
-              onChange={(e) => setItem({ ...item, [e.target.name]: e.target.value })}
-              placeholder='description'
-            />
-          </div>
-          <div className='col-3'>
-            <input
-              className='form-control form-control-sm'
-              name='rate'
-              type='number'
-              value={item.rate}
-              onChange={(e) => setItem({ ...item, [e.target.name]: e.target.value })}
-              placeholder='rate'
-            />
-          </div>
-          <div className='col-3'>
-            <input
-              className='form-control form-control-sm'
-              name='quantity'
-              type='number'
-              value={item.quantity}
-              onChange={(e) => setItem({ ...item, [e.target.name]: e.target.value })}
-              placeholder='quantity'
-            />
-          </div>
 
-          <div className='col-3'>
-            <button
-              className='btn btn-primary btn-sm'
-              onClick={(e) => {
-                e.preventDefault();
-                setItems([...items, item]);
-              }}>
-              Add item
-            </button>
-          </div>
-        </div>
         <InvoiceTable>
-          {items.map((inv, i) => (
-            <InvoiceItem
-              key={i}
-              description={inv.description}
-              index={i}
-              quantity={inv.quantity}
-              rate={inv.rate}
-              handleDelete={(e) => {
-                e.preventDefault();
-                handleItemDelete(e);
-              }}
-            />
-          ))}
+          {controlledFields.map((field, index) => {
+            return (
+              <tr key={field.id}>
+                <th scope='row'>{index + 1}</th>
+                <td>
+                  <input
+                    {...register(`items.${index}.description`)}
+                    className='form-control form-control-sm'
+                    name={`items[${index}].description`}
+                    placeholder='description'
+                  />
+                </td>
+
+                <td>
+                  <input
+                    {...register(`items.${index}.quantity`, { valueAsNumber: true })}
+                    className='form-control form-control-sm'
+                    name={`items[${index}].quantity`}
+                    type='number'
+                    placeholder='quantity'
+                  />
+                </td>
+
+                <td>
+                  <input
+                    {...register(`items.${index}.rate`, { valueAsNumber: true })}
+                    className='form-control form-control-sm'
+                    name={`items[${index}].rate`}
+                    type='number'
+                    placeholder='rate'
+                  />
+                </td>
+                <td>{calculateAmount(field.quantity, field.rate)}</td>
+                <td>
+                  <button className='btn btn-sm btn-danger' type='button' onClick={() => remove(index)}>
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </InvoiceTable>
         <div className='row'>
           <div className='col'>
             <input type='submit' className='btn btn-primary' />
+            <button
+              className='btn btn-primary pull-right'
+              type='button'
+              onClick={() => append({ description: '', rate: 0, quantity: 0 })}>
+              Append
+            </button>
           </div>
         </div>
         <hr />
