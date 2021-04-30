@@ -85,7 +85,7 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
               {session ? authLinks : guestLinks}
             </Nav>
           </Collapse>
-          {session ? <small className='text-muted'>{signedInAs}</small> : null}
+          {session ? <small className='text-white'>{signedInAs}</small> : null}
         </Container>
       </Navbar>
     </>

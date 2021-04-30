@@ -21,3 +21,27 @@ export interface InvoiceFor {
     postCode: string;
   };
 }
+
+export interface IFormInputs {
+  title: string;
+  user: string;
+  name: string;
+  street: string;
+  houseNumber: string;
+  postCode: string;
+  email: string;
+  invoiceNumber: string;
+  logo: string;
+  dueDate: string;
+  paymentTerm: string;
+  billTo: string;
+  shipTo: string;
+  notes: string;
+  terms: string;
+  items: [];
+  sum: number;
+  tax: number;
+  amountPaid: number;
+  subTotal: number;
+  balance: number;
+}

@@ -1,7 +1,8 @@
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import SectionHeader from '@components/common/SectionHeader';
 
-const Account = ({ session }) => {
+const Account = ({ session }): JSX.Element => {
   const { user } = session;
   return (
     <>
@@ -9,12 +10,14 @@ const Account = ({ session }) => {
         <h1>You are not logged in</h1>
       ) : (
         <div className='container'>
-          <div className='row'>
+          <SectionHeader title='My Account' />
+          <div className='row mt-3'>
             <div className='col'>
-              <h1 className='display-4'>My Account {user?.name}</h1>
-              <h1 className='display-4'>Phone {user?.phone}</h1>
+              <h6>Name: {user?.name}</h6>
+              <h6>Phone: {user?.phone}</h6>
             </div>
           </div>
+          <SectionHeader title='Income' />
         </div>
       )}
     </>

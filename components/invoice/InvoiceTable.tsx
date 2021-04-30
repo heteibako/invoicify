@@ -1,8 +1,10 @@
+import { Table } from 'reactstrap';
+
 export const InvoiceTable = ({ children }) => {
   return (
     <div className='row'>
       <div className='col'>
-        <table className='table'>
+        <Table className='table-shopping'>
           <thead>
             <tr>
               <th scope='col'>#</th>
@@ -14,7 +16,7 @@ export const InvoiceTable = ({ children }) => {
             </tr>
           </thead>
           <tbody>{children}</tbody>
-        </table>
+        </Table>
       </div>
     </div>
   );

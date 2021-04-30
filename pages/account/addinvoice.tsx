@@ -8,30 +8,7 @@ import useAddInvoice from 'hooks/invoices';
 import { InvoiceItem } from '@components/invoice/InvoiceItem';
 import { InvoiceTable } from '@components/invoice/InvoiceTable';
 import { GetServerSideProps } from 'next';
-
-interface IFormInputs {
-  title: string;
-  user: string;
-  name: string;
-  street: string;
-  houseNumber: string;
-  postCode: string;
-  email: string;
-  invoiceNumber: string;
-  logo: string;
-  dueDate: string;
-  paymentTerm: string;
-  billTo: string;
-  shipTo: string;
-  notes: string;
-  terms: string;
-  items: [];
-  sum: number;
-  tax: number;
-  amountPaid: number;
-  subTotal: number;
-  balance: number;
-}
+import { IFormInputs } from '@lib/interfaces';
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -46,13 +23,18 @@ export default function AddInvoice({ session }) {
   const [tax, setTax] = useState(0);
 
   const handleItemDelete = (e: { target: { value: number } }) => {
-    const array = [...items]; // make a separate copy of the array
+    const array = [...items];
     const index = array.indexOf(Number(e.target.value));
     array.splice(index, 1);
     setItems(array);
   };
   const totalAmount =
-    items.length === 0 ? null : items.reduce((acc, curr) => acc + Number(curr.rate) * Number(curr.quantity), 0);
+    items.length === 0
+      ? null
+      : items.reduce(
+          (acc: number, curr: { rate: number; quantity: number }) => acc + Number(curr.rate) * Number(curr.quantity),
+          0
+        );
   const totalAmountWithTax = totalAmount + (totalAmount / 100) * tax;
   const {
     register,
@@ -61,7 +43,7 @@ export default function AddInvoice({ session }) {
   } = useForm<IFormInputs>({
     resolver: yupResolver(schema),
   });
-  console.log(session.user.email);
+
   const onSubmit = (data: IFormInputs) => {
     const {
       title,
@@ -108,9 +90,9 @@ export default function AddInvoice({ session }) {
 
   return (
     <div className='container-fluid'>
-      <div className='row mt-5'>
+      <div className='row'>
         <div className='col'>
-          <h1 className='display-4 text-center'>New Invoice</h1>
+          <h2 className='text-center'>New Invoice</h2>
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
