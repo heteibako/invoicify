@@ -8,7 +8,6 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
   const [collapseOpen, setCollapseOpen] = React.useState(true);
   React.useEffect(() => {
     let headroom = new Headroom(document.getElementById('navbar-main'));
-    // initialise
     headroom.init();
   });
   const authLinks = (
@@ -55,7 +54,9 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
       <Navbar expand='lg' id='navbar-main' color='danger'>
         <Container>
           <div className='navbar-translate'>
-            <NavbarBrand id='navbar-brand'>Invoicify</NavbarBrand>
+            <NavbarBrand id='navbar-brand' to='/index' href='/'>
+              Invoicify
+            </NavbarBrand>
             <UncontrolledTooltip placement='bottom' target='navbar-brand'>
               Invoicify
             </UncontrolledTooltip>
@@ -73,7 +74,7 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
               <span className='navbar-toggler-bar bar3' />
             </button>
           </div>
-          <Collapse isOpen={collapseOpen}>
+          <Collapse navbar isOpen={collapseOpen}>
             <Nav className='ml-auto' navbar>
               <NavItem>
                 <Link href='/'>
@@ -83,9 +84,15 @@ const NavBar = ({ session, login, logout, signedInAs }) => {
                 </Link>
               </NavItem>
               {session ? authLinks : guestLinks}
+              <NavItem>
+                {session && (
+                  <Link href='/account'>
+                    <a className='nav-link'>{signedInAs}</a>
+                  </Link>
+                )}
+              </NavItem>
             </Nav>
           </Collapse>
-          {session ? <small className='text-white'>{signedInAs}</small> : null}
         </Container>
       </Navbar>
     </>
