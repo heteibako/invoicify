@@ -179,9 +179,8 @@ export default function AddInvoice({ session }) {
             );
           })}
         </InvoiceTable>
-        <div className='row'>
+        <div className='row mb-3'>
           <div className='col'>
-            <input type='submit' className='btn btn-primary' />
             <button
               className='btn btn-primary pull-right'
               type='button'
@@ -190,7 +189,7 @@ export default function AddInvoice({ session }) {
             </button>
           </div>
         </div>
-        <hr />
+
         <div className='row'>
           <div className='col-2'>
             <input placeholder='tax' className='form-control' onChange={(e) => setTax(Number(e.target.value))} />
@@ -199,6 +198,12 @@ export default function AddInvoice({ session }) {
           <div className='col-2'>
             <p>total: {totalAmount}</p>
             <p>total with tax: {totalAmountWithTax}</p>
+          </div>
+        </div>
+        <hr />
+        <div className='row'>
+          <div className='col-6'>
+            <input type='submit' className='btn btn-primary' />
           </div>
         </div>
       </form>
