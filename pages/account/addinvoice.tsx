@@ -44,9 +44,9 @@ export default function AddInvoice({ session }) {
       ...watchFieldArray[index],
     };
   });
-  const filedsArray = fields.map((field) => ({ rate: field.rate, quantity: field.quantity }));
-  const totalAmount = filedsArray && filedsArray.reduce((acc, curr) => acc + curr.rate * curr.quantity, 0);
-  const totalAmountWithTax = totalAmount + (totalAmount / 100) * tax;
+  // const filedsArray = fields.map((field) => ({ rate: field.rate, quantity: field.quantity }));
+  // const totalAmount = filedsArray && filedsArray.reduce((acc, curr) => acc + curr.rate * curr.quantity, 0);
+  // const totalAmountWithTax = totalAmount + (totalAmount / 100) * tax;
 
   const onSubmit = (data: IFormInputs) => {
     const {
@@ -82,10 +82,10 @@ export default function AddInvoice({ session }) {
       notes,
       terms,
       items,
-      sum: totalAmount,
+      // sum: totalAmount,
       tax,
       amountPaid,
-      subTotal: totalAmountWithTax,
+      // subTotal: totalAmountWithTax,
     });
     console.log(data);
     router.push('/account/invoices');
@@ -196,8 +196,8 @@ export default function AddInvoice({ session }) {
           </div>
           <div className='col-8'></div>
           <div className='col-2'>
-            <p>total: {totalAmount}</p>
-            <p>total with tax: {totalAmountWithTax}</p>
+            {/* <p>total: {totalAmount}</p>
+            <p>total with tax: {totalAmountWithTax}</p> */}
           </div>
         </div>
         <hr />
