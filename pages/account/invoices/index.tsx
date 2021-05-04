@@ -9,7 +9,7 @@ import Link from 'next/link';
 import InvoicesListTable from '@components/invoice/InvoicesListTable';
 
 const Invoices = ({ dehydratedState }) => {
-  const { data } = dehydratedState.queries[0].state.data;
+  const { data } = dehydratedState.queries[0].state;
   return (
     <div className='container'>
       <div className='row'>

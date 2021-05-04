@@ -32,12 +32,12 @@ const InvoiceDetail = ({ invoice }) => {
   );
 };
 
-export const getStaticProps = async (ctx) => {
+export const getStaticProps = async (ctx: { params: string }) => {
   const { params } = ctx;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery('invoices', fetchInvoices);
   const dehydratedInvoices = dehydrate(queryClient);
-  const invoice = dehydratedInvoices.queries[0]?.state.data.data.find((el) => el._id === params.id);
+  const invoice = dehydratedInvoices.queries[0]?.state.data.data.find((el: { _id: string }) => el._id === params.id);
 
   return {
     props: {
@@ -50,7 +50,7 @@ export const getStaticPaths = async () => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery('invoices', fetchInvoices);
   const dehydratedInvoices = dehydrate(queryClient);
-  const params = dehydratedInvoices.queries[0]?.state.data.data.map((el) => el._id);
+  const params = dehydratedInvoices.queries[0].state.data.data.map((el: { _id: string }) => el._id);
   const pathsWithParams = params.map((id: string) => ({
     params: { id },
   }));

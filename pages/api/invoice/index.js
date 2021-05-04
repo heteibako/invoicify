@@ -61,7 +61,7 @@ export default async function handler(req, res) {
       case 'GET':
         const invoices = await Invoice.find({}).populate({ path: 'user', select: ' -password  -createdAt' });
 
-        res.status(200).json({ success: true, data: invoices });
+        res.status(200).json(invoices);
         break;
     }
   } catch (error) {
