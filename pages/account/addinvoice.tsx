@@ -24,7 +24,7 @@ export default function AddInvoice({ session }) {
     control,
     watch,
     formState: { errors },
-  } = useForm<IFormInputs>({
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
