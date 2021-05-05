@@ -40,8 +40,8 @@ export interface IFormInputs {
   notes: string;
   terms: string;
   items: [];
-  sum?: number;
+  sum: number;
   tax: number;
   amountPaid: number;
-  subTotal?: number;
+  subTotal: number;
 }

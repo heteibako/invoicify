@@ -37,7 +37,7 @@ export const getStaticProps = async (ctx: { params: string }) => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery('invoices', fetchInvoices);
   const dehydratedInvoices = dehydrate(queryClient);
-  const invoice = dehydratedInvoices.queries[0]?.state.data.data.find((el: { _id: string }) => el._id === params.id);
+  const invoice = dehydratedInvoices.queries[0].state.data.data.find((el: { _id: string }) => el._id === params.id);
 
   return {
     props: {
