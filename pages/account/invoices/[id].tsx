@@ -44,7 +44,7 @@ const queryFetching = async () => {
   const dehydratedInvoices = dehydrate(queryClient);
   return dehydrateDestructure(dehydratedInvoices);
 };
-export const getStaticProps = async (ctx: { params: string }) => {
+export const getStaticProps = async (ctx: { params: { id: string } }) => {
   const { params } = ctx;
   const invoiceQuery = await queryFetching();
 
