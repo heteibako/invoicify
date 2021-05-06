@@ -5,9 +5,11 @@ import { format } from 'date-fns';
 import { fetchInvoices } from 'hooks/useFetchInvoices';
 
 const InvoiceDetail = ({ invoice }) => {
+  {
+    console.log(invoice);
+  }
   return (
     <div className='container'>
-      {console.log(invoice)}
       <div className='row my-3'>
         <div className='col'>
           <h5>Invoice id:{invoice._id}</h5>
@@ -32,13 +34,21 @@ const InvoiceDetail = ({ invoice }) => {
   );
 };
 
-export const getStaticProps = async (ctx: { params: string }) => {
-  const { params } = ctx;
+const dehydrateDestructure = (arr) => {
+  return arr.queries[0].state.data.data;
+};
+
+const queryFetching = async () => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery('invoices', fetchInvoices);
   const dehydratedInvoices = dehydrate(queryClient);
-  const invoice = dehydratedInvoices.queries[0].state.data.data.find((el: { _id: string }) => el._id === params.id);
+  return dehydrateDestructure(dehydratedInvoices);
+};
+export const getStaticProps = async (ctx: { params: string }) => {
+  const { params } = ctx;
+  const invoiceQuery = await queryFetching();
 
+  const invoice = invoiceQuery.find((el: { _id: string }) => el._id === params.id);
   return {
     props: {
       invoice,
@@ -47,10 +57,8 @@ export const getStaticProps = async (ctx: { params: string }) => {
 };
 
 export const getStaticPaths = async () => {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery('invoices', fetchInvoices);
-  const dehydratedInvoices = dehydrate(queryClient);
-  const params = dehydratedInvoices.queries[0].state.data.data.map((el: { _id: string }) => el._id);
+  const invoiceQuery = await queryFetching();
+  const params = invoiceQuery.map((el: { _id: string }) => el._id);
   const pathsWithParams = params.map((id: string) => ({
     params: { id },
   }));
