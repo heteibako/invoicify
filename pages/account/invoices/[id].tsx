@@ -1,13 +1,16 @@
 import React from 'react';
-import { QueryClient } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
+import { useRouter } from 'next/router';
+import { QueryClient, useQuery } from 'react-query';
+import { dehydrate, DehydratedState } from 'react-query/hydration';
 import { format } from 'date-fns';
-import { fetchInvoices } from 'hooks/useFetchInvoices';
+import { fetchInvoice, fetchInvoices } from 'hooks/useFetchInvoices';
 
 const InvoiceDetail = ({ invoice }) => {
-  {
-    console.log(invoice);
-  }
+  const {
+    query: { id },
+  } = useRouter();
+  const { data } = useQuery(['invoice', { id }], () => fetchInvoice(id.toString()));
+  console.log(data);
   return (
     <div className='container'>
       <div className='row my-3'>

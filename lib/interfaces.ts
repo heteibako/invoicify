@@ -45,3 +45,11 @@ export interface IFormInputs {
   amountPaid: number;
   subTotal: number;
 }
+
+export interface RegisterValues {
+  name: string;
+  email: string;
+  password: string;
+  isConsent: boolean;
+  phone: string;
+}

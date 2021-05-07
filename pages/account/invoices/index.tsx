@@ -1,15 +1,15 @@
 import React from 'react';
 import { IInvoice } from '@lib/interfaces';
 import { fetchInvoices } from '@lib/api';
-import { QueryClient } from 'react-query';
+import { QueryClient, useQuery } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 import { format } from 'date-fns';
 import { getSession } from 'next-auth/client';
 import Link from 'next/link';
 import InvoicesListTable from '@components/invoice/InvoicesListTable';
 
-const Invoices = ({ dehydratedState }) => {
-  const { data } = dehydratedState.queries[0].state;
+const Invoices = () => {
+  const { data } = useQuery('invoices', fetchInvoices);
   return (
     <div className='container'>
       <div className='row'>

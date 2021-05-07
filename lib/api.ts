@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { RegisterValues } from '@lib/interfaces';
 
 export const fetchInvoices = async () => {
   return await axios.get(`http://localhost:3000/api/invoice`).then((res) => res.data);
 };
 
-export const registerUser = async (data) => {
+export const registerUser = async (data: RegisterValues) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
