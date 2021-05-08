@@ -9,8 +9,10 @@ const InvoiceDetail = ({ invoice }) => {
   const {
     query: { id },
   } = useRouter();
-  const { data } = useQuery(['invoice', { id }], () => fetchInvoice(id.toString()));
-  console.log(data);
+  const { data, isLoading } = useQuery(['invoice', { id }], () => fetchInvoice(id.toString()));
+  if (isLoading) {
+    return <h1>Loading</h1>;
+  }
   return (
     <div className='container'>
       <div className='row my-3'>
@@ -38,7 +40,7 @@ const InvoiceDetail = ({ invoice }) => {
 };
 
 const dehydrateDestructure = (arr) => {
-  return arr.queries[0].state.data.data;
+  return arr.queries[0].state.data;
 };
 
 const queryFetching = async () => {

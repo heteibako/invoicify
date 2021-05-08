@@ -7,9 +7,12 @@ import { format } from 'date-fns';
 import { getSession } from 'next-auth/client';
 import Link from 'next/link';
 import InvoicesListTable from '@components/invoice/InvoicesListTable';
+import { useFetchInvoices } from '@hooks/useFetchInvoices';
 
 const Invoices = () => {
-  const { data } = useQuery('invoices', fetchInvoices);
+  const { data, isLoading } = useQuery('invoices', fetchInvoices);
+  console.log(data);
+  if (isLoading) return <h1>Loading</h1>;
   return (
     <div className='container'>
       <div className='row'>
@@ -65,8 +68,7 @@ const Invoices = () => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery('invoices', fetchInvoices);
+  const data = await useFetchInvoices();
   if (!session) {
     return {
       redirect: {
@@ -77,7 +79,7 @@ export async function getServerSideProps(context) {
   }
   return {
     props: {
-      dehydratedState: dehydrate(queryClient),
+      dehydratedState: data,
     },
   };
 }
