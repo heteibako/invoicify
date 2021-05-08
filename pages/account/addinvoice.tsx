@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import useAddInvoice from 'hooks/invoices';
+import useAddInvoice from '@hooks/invoices';
 import { InvoiceTable } from '@components/invoice/InvoiceTable';
 import { GetServerSideProps } from 'next';
 import { IFormInputs } from '@lib/interfaces';
@@ -44,8 +44,9 @@ export default function AddInvoice({ session }) {
       ...watchFieldArray[index],
     };
   });
-  const filedsArray = fields.map((field) => ({ rate: field.rate, quantity: field.quantity }));
-  const totalAmount = filedsArray && filedsArray.reduce((acc, curr) => acc + curr.rate * curr.quantity, 0);
+  // @ts-ignore
+  const fieldsArray = fields.map(({quantity, rate}) => ({ rate: rate, quantity: quantity }));
+  const totalAmount = fieldsArray && fieldsArray.reduce((acc, curr) => acc + curr.rate * curr.quantity, 0);
   const totalAmountWithTax = totalAmount + (totalAmount / 100) * tax;
 
   const onSubmit = (data: IFormInputs) => {
@@ -87,7 +88,6 @@ export default function AddInvoice({ session }) {
       amountPaid,
       subTotal: totalAmountWithTax,
     });
-    console.log(data);
     router.push('/account/invoices');
   };
 
