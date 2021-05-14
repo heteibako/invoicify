@@ -1,13 +1,14 @@
 import React from 'react';
-import { fetchInvoices } from '@lib/api';
-import { useQuery } from 'react-query';
+import { fetchInvoices, fetchUserInvoices } from '@lib/api';
+import { QueryClient, useQuery } from 'react-query';
 import { getSession } from 'next-auth/client';
 import InvoicesListTable from '@components/invoice/InvoicesListTable';
-import { useFetchInvoices } from '@hooks/useFetchInvoices';
+import { dehydrate } from 'react-query/hydration';
 
-const Invoices = () => {
-  const { data, isLoading } = useQuery('invoices', fetchInvoices);
+const Invoices = ({ userId }) => {
+  const { data, isLoading } = useQuery('userInvoices', () => fetchUserInvoices(userId));
   if (isLoading) return <h1>Loading</h1>;
+
   return (
     <div className='container'>
       <div className='row'>
@@ -26,7 +27,9 @@ const Invoices = () => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-  const data = await useFetchInvoices();
+  const queryClient = new QueryClient();
+  const idForUser = session?.user._id.toString();
+  await queryClient.prefetchQuery('userInvoices', () => fetchUserInvoices(idForUser));
   if (!session) {
     return {
       redirect: {
@@ -37,7 +40,8 @@ export async function getServerSideProps(context) {
   }
   return {
     props: {
-      dehydratedState: data,
+      invoices: dehydrate(queryClient),
+      userId: idForUser,
     },
   };
 }

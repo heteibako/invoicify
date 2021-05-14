@@ -5,6 +5,13 @@ export const fetchInvoices = async () => {
   return await axios.get(`http://localhost:3000/api/invoice`).then((res) => res.data);
 };
 
+export const fetchUserInvoices = async (id: string) => {
+  const data = await axios.get(`http://localhost:3000/api/invoice`).then((res) => res.data);
+
+  const invoices = data.filter((invoice) => invoice.user._id === id);
+  return invoices;
+};
+
 export const registerUser = async (data: RegisterValues) => {
   const config = {
     headers: {
