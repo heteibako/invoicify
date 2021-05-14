@@ -7,8 +7,7 @@ export const fetchInvoices = async () => {
 
 export const fetchUserInvoices = async (id: string) => {
   const data = await axios.get(`http://localhost:3000/api/invoice`).then((res) => res.data);
-
-  const invoices = data.filter((invoice) => invoice.user._id === id);
+  const invoices = data.filter((invoice: { user: { _id: string } }) => invoice.user._id === id);
   return invoices;
 };
 
