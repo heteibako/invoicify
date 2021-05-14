@@ -7,15 +7,26 @@ import { dehydrate } from 'react-query/hydration';
 
 const Invoices = ({ userId }) => {
   const { data, isLoading } = useQuery('userInvoices', () => fetchUserInvoices(userId));
-  const reducerFn = (arr: any[], key: string): number => {
-    const result = arr?.reduce((acc: { a: number }, curr: { a: number }): number => {
-      return acc[key] + curr[key];
-    });
+  if (data?.length === 0) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '80vh' }}>
+        <h1>No data so far</h1>
+      </div>
+    );
+  }
+
+  if (isLoading) return <h1>Loading</h1>;
+
+  const reducerFn = (key: string) => {
+    if (data.length === 1) {
+      return data[0][key];
+    }
+    const result = data.reduce((acc: { a: number }, curr: { a: number }): number => acc[key] + curr[key]);
+
     return result;
   };
-  const total = reducerFn(data, 'sum');
-  const subTotal = reducerFn(data, 'subTotal');
-  if (isLoading) return <h1>Loading</h1>;
+  const total = reducerFn('sum');
+  const subTotal = reducerFn('subTotal').toFixed(2);
 
   return (
     <div className='container'>
