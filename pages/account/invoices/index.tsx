@@ -1,11 +1,7 @@
 import React from 'react';
-import { IInvoice } from '@lib/interfaces';
 import { fetchInvoices } from '@lib/api';
-import { QueryClient, useQuery } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
-import { format } from 'date-fns';
+import { useQuery } from 'react-query';
 import { getSession } from 'next-auth/client';
-import Link from 'next/link';
 import InvoicesListTable from '@components/invoice/InvoicesListTable';
 import { useFetchInvoices } from '@hooks/useFetchInvoices';
 
