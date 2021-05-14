@@ -45,7 +45,7 @@ export default function AddInvoice({ session }) {
     };
   });
   // @ts-ignore
-  const fieldsArray = fields.map(({quantity, rate}) => ({ rate: rate, quantity: quantity }));
+  const fieldsArray = fields.map(({ quantity, rate }) => ({ rate, quantity }));
   const totalAmount = fieldsArray && fieldsArray.reduce((acc, curr) => acc + curr.rate * curr.quantity, 0);
   const totalAmountWithTax = totalAmount + (totalAmount / 100) * tax;
 

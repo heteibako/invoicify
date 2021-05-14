@@ -16,5 +16,5 @@ export const useFetchInvoices = async () => {
 
   const data = dehydrate(queryClient);
 
-  return { data };
+  return data;
 };

@@ -40,7 +40,7 @@ const InvoiceDetail = ({ invoice }) => {
 };
 
 const dehydrateDestructure = (arr) => {
-  return arr.queries[0].state.data;
+  return arr.queries[0]?.state.data;
 };
 
 const queryFetching = async () => {
