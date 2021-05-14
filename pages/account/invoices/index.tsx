@@ -5,9 +5,10 @@ import { getSession } from 'next-auth/client';
 import InvoicesListTable from '@components/invoice/InvoicesListTable';
 import { dehydrate } from 'react-query/hydration';
 
-const Invoices = ({ userId }) => {
-  const { data, isLoading } = useQuery('userInvoices', () => fetchUserInvoices(userId));
-  if (data?.length === 0) {
+const Invoices = ({ userId, dehydratedState }) => {
+  const { isLoading } = useQuery('userInvoices', () => fetchUserInvoices(userId));
+
+  if (dehydratedState?.length === 0) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '80vh' }}>
         <h1>No data so far</h1>
@@ -18,11 +19,10 @@ const Invoices = ({ userId }) => {
   if (isLoading) return <h1>Loading</h1>;
 
   const reducerFn = (key: string) => {
-    if (data.length === 1) {
-      return data[0][key];
+    if (dehydratedState.length === 1) {
+      return dehydratedState[0][key];
     }
-    const result = data.reduce((acc: { a: number }, curr: { a: number }): number => acc[key] + curr[key]);
-
+    const result = dehydratedState.reduce((acc: { a: number }, curr: { a: number }): number => acc[key] + curr[key]);
     return result;
   };
   const total = reducerFn('sum');
@@ -45,7 +45,7 @@ const Invoices = ({ userId }) => {
       </div>
       <div className='row mt-5'>
         <div className='col'>
-          <InvoicesListTable data={data} />
+          <InvoicesListTable data={dehydratedState} />
         </div>
       </div>
     </div>
@@ -65,9 +65,12 @@ export async function getServerSideProps(context) {
       },
     };
   }
+  const destructureDehydrate = (obj) => {
+    return obj.queries[0].state.data;
+  };
   return {
     props: {
-      invoices: dehydrate(queryClient),
+      dehydratedState: destructureDehydrate(dehydrate(queryClient)),
       userId: idForUser,
     },
   };
